@@ -28,6 +28,10 @@ let counter = 1;
 let workTime = 45;
 let breakTime = 5;
 
+let multiplierValue = 1.25;
+
+let tempTask = [];
+let tempTime = [];
 
 //Clearing the input field function
 function clearThis(target) {
@@ -72,14 +76,14 @@ function chat() {
         	answers.innerHTML += 'Settings: work block:' + ' | ' + ans + ' min <br>';
         	askBreakBlock = true;
         	clearThis(enter);
-        	workTime = ans;
+        	workTime = parseInt(ans);
         } else if (askBreakBlock) {
         	questions.innerHTML = ('What is Task 1? <br>');
         	askBreakBlock = false;
         	asktask = true;
         	answers.innerHTML += 'Settings: break block:' + ' | ' + ans + ' min <br>';
         	clearThis(enter);
-        	breakTime = ans;
+        	breakTime = parseInt(ans);
         }
         else 
             {
@@ -117,10 +121,10 @@ reset.addEventListener("click", resetAll);
 
 
 
-//Multiplier function to account for overconfident estimates
+//Multiplier function to account for overconfident estimates - I really like this feature!
 function multiplier(arr) {
     for (let i = 0; i < arr.length; i++) {
-        arr[i] = Math.ceil((arr[i]*1.25)/10)*10;
+        arr[i] = Math.ceil((arr[i]*multiplierValue)/10)*10;
     }
 }
 
@@ -149,30 +153,38 @@ function multiplier(arr) {
 // UPDATED - Displaying the array of times and updating the values
 function chunk(timeArray, taskArray) {
     let total = 0;
-    
-    for(let i = 0; i < timeArray.length; i++) {
-        total+= timeArray[i];
-
-        if (total > 45) {
-            let temp = timeArray[i];
-            timeArray[i] = timeArray[i] - (total-45);
-            
-            timeArray.splice(i+1, 0, 5);
-            taskArray.splice(i+1, 0, 'Take a break!');
-            
-            timeArray.splice(i+2, 0, (temp-timeArray[i]));
-            taskArray.splice(i+2, 0, taskArray[i]);
-            
-            total = 0;
+    tempTask = [];
+    tempTime = [];
+    let residue = 0;
+    for (let i = 0; i < timeArray.length; i++) {
+        total += timeArray[i];
+        while (total >= workTime) {
+            tempTime.push(workTime - residue);
+            residue = 0;
+            tempTime.push(breakTime);
+            tempTask.push(taskArray[i]);
+            tempTask.push("Take a break!");
+            total -= workTime;
+        }
+        if (total > 0) {
+            tempTime.push(total);
+            tempTask.push(taskArray[i]);
+            residue = total;
         }
     }
+    timeArray = tempTime;
+    taskArray = tempTask;
 }
 
 //This is the initial Start Time
-let currTime = new Date(); 
-let minute = Math.floor((Math.ceil((currTime.getMinutes()/10))*10)%60); 
-let hour = currTime.getHours() + Math.floor((currTime.getMinutes() + 5)/60); 
-
+// let currTime = new Date(); 
+// let minute = Math.floor((Math.ceil((currTime.getMinutes()/10))*10)%60); 
+// let hour = currTime.getHours() + Math.floor((currTime.getMinutes() + 5)/60); 
+let coeff = 1000 * 60 * 5;
+let currTime = new Date();  //or use any other date
+let rounded = new Date(Math.ceil(currTime.getTime() / coeff) * coeff);
+let minute = rounded.getMinutes();
+let hour = rounded.getHours();
 
 //This is the actual Get Time function
 function getTime(start, timeElaps) {
@@ -190,8 +202,8 @@ function getTime(start, timeElaps) {
     
     let startTime = (starthrs + ':' + startmin);
     
-    endhrs = hour + Math.floor((timeElaps+minute)/60); 
-    endmin = Math.floor((minute + Math.floor(timeElaps%60))%60);
+    endhrs = starthrs + Math.floor((timeElaps+startmin)/60); 
+    endmin = Math.floor((startmin + Math.floor(timeElaps%60))%60);
     if (endmin < 10) {
         endmin = '0'+endmin;
     }
@@ -211,15 +223,17 @@ function makeSchedule() {
     schedule.innerHTML += 'Schedule:' + '<br>';
     multiplier(timeArray);
     chunk(timeArray, taskArray);
-    for (let i = 0; i < timeArray.length; i++) {
-        total += timeArray[i];
-        if (taskArray[i] === 'Take a break!') {
-        schedule.innerHTML += '<li class= "schedule break">' + getTime(start, total, i) + ' -> ' + taskArray[i] + '<br>'+ '</li>';    
+    total = 0;
+    for (let i = 0; i < tempTime.length; i++) {
+        if (tempTask[i] === 'Take a break!') {
+            schedule.innerHTML += '<li class= "schedule break">' + getTime(start, tempTime[i]) + ' -> ' + tempTask[i] + '<br>'+ '</li>';  
         }
         else {
-        schedule.innerHTML += '<li class= "schedule"><a href ="#">' + getTime(start, total, i) + ' -> ' + taskArray[i] + '<br>'+ '</a></li>';
-        start += timeArray[i];
-    }}
+            schedule.innerHTML += '<li class= "schedule"><a href ="#">' + getTime(start, tempTime[i]) + ' -> ' + tempTask[i] + '<br>'+ '</a></li>';
+        }
+        start += tempTime[i]; 
+        console.log(start);
+    }
     hide();
     hide2();
 }
@@ -236,6 +250,9 @@ document.querySelector("li").addEventListener("click", function (e) {
         li.style.textDecoration = "none";
     }
 });
+
+
+
 
 
 
