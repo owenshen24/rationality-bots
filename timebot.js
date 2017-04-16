@@ -197,7 +197,7 @@ function getTime(start, timeElaps) {
     starthrs = hour + Math.floor((start+minute)/60); 
     startmin = Math.floor((minute + Math.floor(start%60))%60);
     if (startmin < 10) {
-        startmin = '0'+startmin;
+        startmin = "0" + startmin;
     }
     
     let startTime = (starthrs + ':' + startmin);
@@ -205,7 +205,7 @@ function getTime(start, timeElaps) {
     endhrs = starthrs + Math.floor((timeElaps+startmin)/60); 
     endmin = Math.floor((startmin + Math.floor(timeElaps%60))%60);
     if (endmin < 10) {
-        endmin = '0'+endmin;
+        endmin = "0" + endmin;
     }
     
     let endTime = (endhrs + ":" + endmin);
