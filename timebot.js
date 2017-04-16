@@ -210,7 +210,7 @@ function getTime(start, timeElaps) {
     
     let endTime = (endhrs + ":" + endmin);
     
-    return(starthrs + ":" + startmin + '-' + endhrs + ":" + endmin);
+    return((starthrs % 24) + ":" + startmin + '-' + (endhrs % 24) + ":" + endmin);
 }
 
 
