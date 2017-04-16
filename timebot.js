@@ -12,9 +12,10 @@ let schedule = document.querySelector('.schedule');
 
 
 //These are the variables to keep the loop going when you're entering stuff
-let asktask = true;
+let asktask = false;
 let asktime = false;
-
+let askWorkBlock = true;
+let askBreakBlock = false;
 
 //These are the arrays that I'll use to make the schedule
 let estimates = [];
@@ -22,6 +23,10 @@ let tasks = [];
 
 //This is the counter for updating the Tasks
 let counter = 1;
+
+//These are the times for the work and the break blocks
+let workTime = 45;
+let breakTime = 5;
 
 
 //Clearing the input field function
@@ -61,6 +66,20 @@ function chat() {
             answers.innerHTML += 'Task:' + ' ' + (counter-1) + ' | ' + ans + ' ';
             clearThis(enter);
             tasks.push(ans);
+        } else if (askWorkBlock) {
+        	questions.innerHTML = ('How long do you want each break to be? (Enter in minutes)');
+        	askWorkBlock = false;
+        	answers.innerHTML += 'Settings: work block:' + ' | ' + ans + ' min <br>';
+        	askBreakBlock = true;
+        	clearThis(enter);
+        	workTime = ans;
+        } else if (askBreakBlock) {
+        	questions.innerHTML = ('What is Task 1? <br>');
+        	askBreakBlock = false;
+        	asktask = true;
+        	answers.innerHTML += 'Settings: break block:' + ' | ' + ans + ' min <br>';
+        	clearThis(enter);
+        	breakTime = ans;
         }
         else 
             {
@@ -106,6 +125,28 @@ function multiplier(arr) {
 }
 
 //Displaying the array of times and updating the values
+// function chunk(timeArray, taskArray) {
+//     let total = 0;
+    
+//     for(let i = 0; i < timeArray.length; i++) {
+//         total+= timeArray[i];
+
+//         if (total > 45) {
+//             let temp = timeArray[i];
+//             timeArray[i] = timeArray[i] - (total-45);
+            
+//             timeArray.splice(i+1, 0, 5);
+//             taskArray.splice(i+1, 0, 'Take a break!');
+            
+//             timeArray.splice(i+2, 0, (temp-timeArray[i]));
+//             taskArray.splice(i+2, 0, taskArray[i]);
+            
+//             total = 0;
+//         }
+//     }
+// }
+
+// UPDATED - Displaying the array of times and updating the values
 function chunk(timeArray, taskArray) {
     let total = 0;
     
