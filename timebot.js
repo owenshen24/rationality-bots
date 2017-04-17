@@ -76,14 +76,14 @@ function chat() {
         	answers.innerHTML += 'Settings: work block:' + ' | ' + ans + ' min <br>';
         	askBreakBlock = true;
         	clearThis(enter);
-        	workTime = parseInt(ans);
+        	workTime = ans;
         } else if (askBreakBlock) {
         	questions.innerHTML = ('What is Task 1? <br>');
         	askBreakBlock = false;
         	asktask = true;
         	answers.innerHTML += 'Settings: break block:' + ' | ' + ans + ' min <br>';
         	clearThis(enter);
-        	breakTime = parseInt(ans);
+        	breakTime = ans;
         }
         else 
             {
@@ -159,15 +159,15 @@ function chunk(timeArray, taskArray) {
     for (let i = 0; i < timeArray.length; i++) {
         total += timeArray[i];
         while (total >= workTime) {
-            tempTime.push(workTime - residue);
+            tempTime.push(parseInt(workTime - residue));
             residue = 0;
-            tempTime.push(breakTime);
+            tempTime.push(parseInt(breakTime));
             tempTask.push(taskArray[i]);
             tempTask.push("Take a break!");
             total -= workTime;
         }
         if (total > 0) {
-            tempTime.push(total);
+            tempTime.push(parseInt(total));
             tempTask.push(taskArray[i]);
             residue = total;
         }
@@ -180,6 +180,8 @@ function chunk(timeArray, taskArray) {
 // let currTime = new Date(); 
 // let minute = Math.floor((Math.ceil((currTime.getMinutes()/10))*10)%60); 
 // let hour = currTime.getHours() + Math.floor((currTime.getMinutes() + 5)/60); 
+
+
 let coeff = 1000 * 60 * 5;
 let currTime = new Date();  //or use any other date
 let rounded = new Date(Math.ceil(currTime.getTime() / coeff) * coeff);
@@ -187,30 +189,43 @@ let minute = rounded.getMinutes();
 let hour = rounded.getHours();
 
 //This is the actual Get Time function
-function getTime(start, timeElaps) {
-    
+function getTime(mStart, timeElaps) {
     let starthrs = 0;
     let startmin = 0;
     let endhrs = 0;
     let endmin = 0;
     
-    starthrs = hour + Math.floor((start+minute)/60); 
-    startmin = Math.floor((minute + Math.floor(start%60))%60);
+    starthrs = hour; 
+    startmin = minute + mStart;
+    while (startmin >= 60) {
+        startmin = startmin - 60;
+        starthrs = starthrs + 1;
+    }
+    starthrs = starthrs % 24;
     if (startmin < 10) {
         startmin = "0" + startmin;
     }
     
     let startTime = (starthrs + ':' + startmin);
     
-    endhrs = starthrs + Math.floor((timeElaps+startmin)/60); 
-    endmin = Math.floor((startmin + Math.floor(timeElaps%60))%60);
+    endhrs = starthrs; 
+    endmin = startmin + timeElaps;
+    while (endmin >= 60) {
+        endmin = endmin - 60;
+        endhrs = endhrs + 1;
+    }
+    endhrs = endhrs % 24;
+    endmin = parseInt(endmin);
     if (endmin < 10) {
         endmin = "0" + endmin;
+    } else {
+        console.log("END MINS NOT SMALL: " + parseInt(endmin));
     }
     
     let endTime = (endhrs + ":" + endmin);
+
     
-    return((starthrs % 24) + ":" + startmin + '-' + (endhrs % 24) + ":" + endmin);
+    return(startTime + '-' + endTime);
 }
 
 
@@ -232,7 +247,6 @@ function makeSchedule() {
             schedule.innerHTML += '<li class= "schedule"><a href ="#">' + getTime(start, tempTime[i]) + ' -> ' + tempTask[i] + '<br>'+ '</a></li>';
         }
         start += tempTime[i]; 
-        console.log(start);
     }
     hide();
     hide2();
