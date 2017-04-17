@@ -4,11 +4,11 @@ h1, p, input, .form, .Submit, .reset, a, ul{
 }
 
 .break {
-    color:rgb(183, 45, 78);
+    color: rgb(183, 45, 178)
 }
 
 img {
-    width: 150px;
+    width: 170px;
 }
 
 a {
