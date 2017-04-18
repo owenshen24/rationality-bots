@@ -73,17 +73,19 @@ function chat() {
         } else if (askWorkBlock) {
         	questions.innerHTML = ('How long do you want each break to be? (Enter in minutes)');
         	askWorkBlock = false;
-        	answers.innerHTML += 'Settings: work block:' + ' | ' + ans + ' min <br>';
+                let num1 = parseInt(ans, 10);
+        	answers.innerHTML += 'Settings: work block:' + ' | ' + num1 + ' min <br>';
         	askBreakBlock = true;
         	clearThis(enter);
-        	workTime = ans;
+        	workTime = num1;
         } else if (askBreakBlock) {
         	questions.innerHTML = ('What is Task 1? <br>');
         	askBreakBlock = false;
         	asktask = true;
-        	answers.innerHTML += 'Settings: break block:' + ' | ' + ans + ' min <br>';
+                let num2 = parseInt(ans, 10);
+        	answers.innerHTML += 'Settings: break block:' + ' | ' + num2 + ' min <br>';
         	clearThis(enter);
-        	breakTime = ans;
+        	breakTime = num2;
         }
         else 
             {
