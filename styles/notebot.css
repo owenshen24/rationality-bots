@@ -1,12 +1,7 @@
  body {
   text-align: center;
  }
- 
- /* It'd be cool to have a way to 
- have PLACEHOLDER, which is then greyed out
- */
- 
- 
+
  textarea {
     border: none;
     overflow: auto;
@@ -14,12 +9,12 @@
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    
+
     height: 30em;
     width: 90%;
-  
+
     font-family: "Century Gothic", Helvetica, sans-serif;
-    color:rgb(102, 153, 153);
-    
+    color:darkslategray;
+
     font-size: 1.75em;
 }
