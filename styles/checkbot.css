@@ -2,6 +2,19 @@
   text-align: center;
 }
 
+button {
+  border: none;
+  color: black;
+  font-family: 'Raleway', 'Helvetica', sans-serif;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: 2fr 8fr 2fr;
+}
+
 .enter-form {
   font-family: 'Raleway', 'Helvetica', sans-serif;
   width: 90%;
@@ -12,8 +25,8 @@
   -webkit-appearance: none;
 }
 
-.active-to-do:hover {
-  background-color: yellow;
+.active:hover {
+  color: gray;
   cursor: pointer;
 }
 
