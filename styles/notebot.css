@@ -22,7 +22,8 @@
 }
 
 .size-changer > input {
-  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   width: 30px;
   font-size: 18px;
 }
