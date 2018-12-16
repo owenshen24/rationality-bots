@@ -6,3 +6,27 @@
   font-size: 30px;
   margin: 0 auto;
 }
+
+.size-changer {
+  
+}
+
+.size-changer > button {
+  padding: 10px;
+  background-color: black;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 10%;
+}
+
+.size-changer > input {
+  padding: 10px;
+  width: 30px;
+  font-size: 18px;
+}
+
+.size-changer > button:hover {
+  background-color: darkslategray;
+}
